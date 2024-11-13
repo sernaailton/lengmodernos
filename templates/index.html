@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computadoras</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert">
+                {% for msg in messages %}
+                    <p>{{ msg }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% if computadora %}
+        <form action="{{ url_for('edit_computadora', computadora_id=computadora.id) }}" method="POST">
+            <input type="text" name="PROCESADOR" placeholder="Procesador" value="{{ computadora.procesador }}" required>
+            <input type="text" name="TARJETA_GRAFICA" placeholder="Tarjeta Gráfica" value="{{ computadora.tarjeta_grafica }}" required>
+            <input type="text" name="RAM" placeholder="RAM" value="{{ computadora.ram }}" required>
+            <input type="text" name="DISCO_DURO" placeholder="Disco Duro" value="{{ computadora.disco_duro }}" required>
+            <button type="submit">Actualizar</button>
+        </form>
+    {% else %}
+        <form action="{{ url_for('add_computadora') }}" method="POST">
+            <input type="text" name="PROCESADOR" placeholder="Procesador" required>
+            <input type="text" name="TARJETA_GRAFICA" placeholder="Tarjeta Gráfica" required>
+            <input type="text" name="RAM" placeholder="RAM" required>
+            <input type="text" name="DISCO_DURO" placeholder="Disco Duro" required>
+            <button type="submit">Guardar</button>
+        </form>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <td>Procesador</td>
+                <td>Tarjeta Gráfica</td>
+                <td>RAM</td>
+                <td>Disco Duro</td>
+                <td>Acciones</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for computadora in computadoras %}
+            <tr>
+                <td>{{ computadora.procesador }}</td>
+                <td>{{ computadora.tarjeta_grafica }}</td>
+                <td>{{ computadora.ram }}</td>
+                <td>{{ computadora.disco_duro }}</td>
+                <td>
+                    <a href="{{ url_for('edit_computadora', computadora_id=computadora.id) }}">Editar</a>
+                    <a href="{{ url_for('delete_computadora', computadora_id=computadora.id) }}">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
